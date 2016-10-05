@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="google-signin-client_id" content="538931457956-pdq0n8m8kg4a46sen9ec19q03ijtua72.apps.googleusercontent.com">
+    
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <title>Kidemy for Kid</title>
 
@@ -16,15 +16,54 @@
     
     <link rel="stylesheet" type="text/css" href="kid.css">
     <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <script src="https://apis.google.com/js/api:client.js"></script>
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
+    
+    
   </head>
   <body>
-   
+   <div id="fb-root"></div>
+        <script>
+            (function(d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s); js.id = id;
+        js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.7&appId=106183589849987";
+        fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));
+        
+
+    var googleUser = {};
+    var startApp = function() {
+        gapi.load('auth2', function(){
+        // Retrieve the singleton for the GoogleAuth library and set up the client.
+        auth2 = gapi.auth2.init({
+            client_id: '538931457956-atqtjie1gsiqr91013b6tsnnf75ompf4.apps.googleusercontent.com',
+            cookiepolicy: 'single_host_origin',
+            // Request scopes in addition to 'profile' and 'email'
+            //scope: 'additional_scope'
+        });
+        attachSignin(document.getElementById('customBtn'));
+        });
+    };
+
+    function attachSignin(element) {
+        console.log(element.id);
+        auth2.attachClickHandler(element, {},
+            function(googleUser) {
+            document.getElementById('name').innerText = "Signed in: " +
+                googleUser.getBasicProfile().getName();
+            }, function(error) {
+            alert(JSON.stringify(error, undefined, 2));
+            });
+    }
+        
+        </script>
 <!-- NAVBAR -->
     <nav id="myNavbar" class="navbar navbar-default navbar-fixed-top" role="navigation">
       
@@ -63,30 +102,36 @@
           
            <div class="fbgg">
                <div class="fb">
-                   <a href="#">Continue with Facebook</a>
+               <a href="#" onclick="fb_login();">Continue with Facebook</a>
+<!--                   <div class="fb-login-button" data-max-rows="1" data-size="medium" data-show-faces="false" data-auto-logout-link="true"></div>-->
+                   
                </div>
                <div class="gg">
-                    <a href="#">Continue with Google</a>
-                    
+                    <a  id="customBtn" style="cursor:pointer;">Continue with Google</a>
+                     <div id="name"></div>
+<!--                 <div class="g-signin2" data-onsuccess="onSignIn" data-theme="dark"></div>-->
                </div>
            </div>
     
     
 <!--    Right Panel-->
    <div class="right-panel">
-           <p>Login with your email</p>       
+           <p>Login with your email</p>
+           <p id="generalError" style="margin-top: -10px;"></p>       
    </div>
    
    <div class="email-panel">
-        <input class="emails form-control fa-envelope" type="email" placeholder="E-mail">
+        <input id="emailLength" class="emails form-control fa-envelope" type="email" placeholder="E-mail">
+         <p class="pull-right" id="mailError"></p>
    </div>
    
    <div class="password-panel">
-        <input class=" passwords form-control" type="password" placeholder="Password">
+        <input id="passwordLength" class=" passwords form-control" type="password" placeholder="Password">
+        <p class="pull-right" id="passError"></p>
    </div>
 <!--   Button-->
     <div class="submit">
-         <input class="btn btn-success" type="button" value="Login">
+         <input class="btn btn-success" type="button" value="Login" onclick="submit()">
          <p>or <a href="#">Forgot Password</a></p>
     </div>
   
@@ -101,9 +146,9 @@
   
    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/js/bootstrap.min.js"></script>
-    
-	<script src="kid.js">
-	</script>
+ <script>startApp();</script>   
+<script src="kid.js"></script>
+
   </body>
 </html>
 
